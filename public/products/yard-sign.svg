@@ -1,0 +1,6 @@
+<svg width="180" height="150" viewBox="0 0 180 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="150" rx="16" fill="#fff"/>
+  <path d="M90 30L128 48V90L90 112L52 90V48L90 30Z" fill="#EFF6FF" stroke="#2563EB" stroke-width="5"/>
+  <text x="90" y="75" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#2563EB">WYZE</text>
+  <path d="M90 112V136" stroke="#64748B" stroke-width="6" stroke-linecap="round"/>
+</svg>

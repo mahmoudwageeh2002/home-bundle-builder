@@ -1,0 +1,6 @@
+<svg width="180" height="150" viewBox="0 0 180 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="150" rx="16" fill="#fff"/>
+  <path d="M90 24L132 41V74C132 100 113 119 90 128C67 119 48 100 48 74V41L90 24Z" fill="#EFF6FF" stroke="#4F46E5" stroke-width="4"/>
+  <text x="90" y="73" text-anchor="middle" font-family="Arial" font-size="20" font-weight="700" fill="#4F46E5">WYZ</text>
+  <path d="M65 88H115" stroke="#10B981" stroke-width="5" stroke-linecap="round"/>
+</svg>
