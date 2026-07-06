@@ -26,7 +26,13 @@ export function StepAccordion({ api, onStepChange, openStep, products, steps }: 
 
         return (
           <section className={`step ${isOpen ? 'step--open' : ''}`.trim()} key={step.id}>
-            <button className="step__header" onClick={() => onStepChange(step.id)} type="button">
+            <button
+              aria-controls={`${step.id}-panel`}
+              aria-expanded={isOpen}
+              className="step__header"
+              onClick={() => onStepChange(step.id)}
+              type="button"
+            >
               <span className="step__eyebrow">STEP {index + 1} OF {steps.length}</span>
               <span className="step__title-row">
                 <img alt="" className="step__icon" src={stepIcons[step.icon]} />
@@ -38,34 +44,40 @@ export function StepAccordion({ api, onStepChange, openStep, products, steps }: 
               </span>
             </button>
 
-            {isOpen ? (
+            <div
+              aria-hidden={!isOpen}
+              className="step__body-shell"
+              id={`${step.id}-panel`}
+            >
               <div className="step__body">
-                <div className="product-grid">
-                  {stepProducts.map((product) => {
-                    const activeVariant = api.getActiveVariant(product)
-                    const quantity = api.getProductQuantity(product, activeVariant?.id)
+                <div className="step__body-content">
+                  <div className="product-grid">
+                    {stepProducts.map((product) => {
+                      const activeVariant = api.getActiveVariant(product)
+                      const quantity = api.getProductQuantity(product, activeVariant?.id)
 
-                    return (
-                      <ProductCard
-                        activeVariant={activeVariant}
-                        key={product.id}
-                        onDecrement={() => api.decrement(product, activeVariant?.id)}
-                        onIncrement={() => api.increment(product, activeVariant?.id)}
-                        onVariantChange={(variantId) => api.setActiveVariant(product.id, variantId)}
-                        product={product}
-                        quantity={quantity}
-                      />
-                    )
-                  })}
-                </div>
+                      return (
+                        <ProductCard
+                          activeVariant={activeVariant}
+                          key={product.id}
+                          onDecrement={() => api.decrement(product, activeVariant?.id)}
+                          onIncrement={() => api.increment(product, activeVariant?.id)}
+                          onVariantChange={(variantId) => api.setActiveVariant(product.id, variantId)}
+                          product={product}
+                          quantity={quantity}
+                        />
+                      )
+                    })}
+                  </div>
 
-                <div className="step__next">
-                  <Button onClick={() => onStepChange(nextStep?.id ?? step.id)} variant="outline">
-                    {step.nextLabel}
-                  </Button>
+                  <div className="step__next">
+                    <Button onClick={() => onStepChange(nextStep?.id ?? step.id)} variant="outline">
+                      {step.nextLabel}
+                    </Button>
+                  </div>
                 </div>
               </div>
-            ) : null}
+            </div>
           </section>
         )
       })}
