@@ -1,75 +1,135 @@
-# React + TypeScript + Vite
+# Home Bundle Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React prototype for a multi-step home security bundle builder. The app lets shoppers choose cameras, plans, sensors, and extra protection while a live review panel updates quantities, pricing, savings, and selected items in real time.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- Axios for loading local JSON data
+- React Icons
+- CSS modules by feature/shared component convention
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Run the project from a clean clone:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The dev server will print a local URL, usually:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+http://localhost:5173/
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Available Scripts
 
+```bash
+npm run dev
+```
+
+Starts the local Vite development server.
+
+```bash
+npm run build
+```
+
+Runs TypeScript checks and creates a production build in `dist/`.
+
+```bash
+npm run preview
+```
+
+Serves the production build locally after running `npm run build`.
+
+```bash
+npm run lint
+```
+
+Runs ESLint across the project.
+
+## What Is Implemented
+
+- Four-step accordion builder:
+  - Choose your cameras
+  - Choose your plan
+  - Choose your sensors
+  - Add extra protection
+- Data-driven product rendering from `public/data/bundle.json`.
+- Axios integration for loading the JSON catalog.
+- Feature-based folder structure under `src/features/bundle-builder`.
+- Shared UI components for buttons, modals, and quantity steppers.
+- Shared theme tokens for colors, typography, spacing, radii, and sizing.
+- Responsive layouts for desktop, tablet, and mobile.
+- Product cards with:
+  - product image
+  - badge
+  - description
+  - learn-more link
+  - variant chips
+  - quantity stepper
+  - compare-at and current pricing
+- Variant-specific quantity handling.
+- Live review panel grouped by category.
+- Synced steppers between product cards and review rows.
+- Dynamic totals and savings calculation.
+- Save-for-later flow using localStorage.
+- Shareable return link with the selected configuration encoded in URL params.
+- Save-link modal with copy support.
+- Checkout success modal with a green confirmation icon.
+- Smooth accordion open/close animation.
+- Review-section scroll/highlight behavior from the final step.
+- Supplied SVG assets integrated for step icons, plan, delivery, and satisfaction badge.
+
+## Data
+
+The product catalog and seeded starting configuration live in:
+
+```bash
+public/data/bundle.json
+```
+
+The app is intentionally data-driven, so products, steps, prices, variants, and the initial selected state are rendered from JSON instead of being hardcoded into individual card markup.
+
+## Decisions And Tradeoffs
+
+This prototype does not include a full backend. Configuration persistence is handled with localStorage and a shareable URL instead of a server-side user/session store.
+
+For a production version, a backend would be the better path for secure, durable user-specific saved systems. It would allow authenticated saves, server validation, safer sharing, recovery across devices, and better control over catalog/pricing changes. The current local approach keeps the take-home focused on the frontend experience while still supporting reload persistence and return links.
+
+The data structure is designed to be extendable, but a production catalog could be more normalized. For example, products, variants, price rules, promotions, plans, and shipping options could be split into separate resources and validated with schemas. That would make the system easier to maintain as the bundle logic grows.
+
+Product imagery is represented with local SVG artwork where original product assets were not available. The provided SVG assets were used for the required step, plan, delivery, and satisfaction badge visuals.
+
+## Project Structure
+
+```bash
+src/
+  features/
+    bundle-builder/
+      components/
+      data/
+      hooks/
+      services/
+      types/
+      utils.ts
+  shared/
+    components/
+    theme/
+public/
+  data/
+  products/
+```
+
+## Verification
+
+The project has been checked with:
+
+```bash
+npm run lint
+npm run build
 ```
