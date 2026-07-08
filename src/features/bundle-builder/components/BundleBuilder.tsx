@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { SaveLinkModal } from '../../../shared/components/Modal/Modal'
+import { useEffect, useRef, useState } from 'react'
+import { CheckoutSuccessModal, SaveLinkModal } from '../../../shared/components/Modal/Modal'
 import { getBundleCatalog } from '../services/catalogService'
 import type { BundleCatalog, StepId } from '../types/bundle'
 import { useBundleBuilder } from '../hooks/useBundleBuilder'
@@ -10,8 +10,20 @@ function BundleBuilderLoaded({ catalog }: { catalog: BundleCatalog }) {
   const [openStep, setOpenStep] = useState<StepId>('cameras')
   const [shareLink, setShareLink] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isReviewHighlighted, setIsReviewHighlighted] = useState(false)
+  const reviewRef = useRef<HTMLDivElement>(null)
+  const highlightTimeoutRef = useRef<number | null>(null)
   const api = useBundleBuilder(catalog)
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current) {
+        window.clearTimeout(highlightTimeoutRef.current)
+      }
+    }
+  }, [])
 
   function handleSave() {
     setCopied(false)
@@ -29,6 +41,23 @@ function BundleBuilderLoaded({ catalog }: { catalog: BundleCatalog }) {
     setCopied(true)
   }
 
+  function handleReviewRequest() {
+    reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setIsReviewHighlighted(false)
+
+    window.requestAnimationFrame(() => {
+      setIsReviewHighlighted(true)
+    })
+
+    if (highlightTimeoutRef.current) {
+      window.clearTimeout(highlightTimeoutRef.current)
+    }
+
+    highlightTimeoutRef.current = window.setTimeout(() => {
+      setIsReviewHighlighted(false)
+    }, 1400)
+  }
+
   return (
     <>
       <main className="bundle-page">
@@ -37,17 +66,32 @@ function BundleBuilderLoaded({ catalog }: { catalog: BundleCatalog }) {
           <div className="bundle-layout__builder">
             <StepAccordion
               api={api}
+              onReview={handleReviewRequest}
               onStepChange={setOpenStep}
               openStep={openStep}
               products={catalog.products}
               steps={catalog.steps}
             />
           </div>
-          <div className="bundle-layout__review">
-            <ReviewPanel api={api} copy={catalog.review} onSave={handleSave} />
+          <div
+            className={`bundle-layout__review ${
+              isReviewHighlighted ? 'bundle-layout__review--highlight' : ''
+            }`.trim()}
+            ref={reviewRef}
+          >
+            <ReviewPanel
+              api={api}
+              copy={catalog.review}
+              onCheckout={() => setIsCheckoutModalOpen(true)}
+              onSave={handleSave}
+            />
           </div>
         </div>
       </main>
+      <CheckoutSuccessModal
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+      />
       <SaveLinkModal
         copied={copied}
         isOpen={isModalOpen}

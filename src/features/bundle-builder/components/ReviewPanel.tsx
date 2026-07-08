@@ -18,6 +18,7 @@ type ReviewPanelProps = {
     financingLabel: string
     savingsMessage: string
   }
+  onCheckout: () => void
   onSave: () => void
 }
 
@@ -70,7 +71,7 @@ function ReviewLineItem({ api, line }: { api: BuilderApi; line: ReviewLine }) {
   )
 }
 
-export function ReviewPanel({ api, copy, onSave }: ReviewPanelProps) {
+export function ReviewPanel({ api, copy, onCheckout, onSave }: ReviewPanelProps) {
   const shippingLines = api.reviewLines.filter((line) => line.product.category === 'shipping')
   const savingsMessage = copy.savingsMessage.replace('{amount}', formatCurrency(api.productTotals.savings))
 
@@ -141,7 +142,7 @@ export function ReviewPanel({ api, copy, onSave }: ReviewPanelProps) {
           </span>
         </div>
 
-        <Button className="review-card__checkout-button" onClick={() => window.alert('Checkout is ready for the prototype.')}>
+        <Button className="review-card__checkout-button" onClick={onCheckout}>
           Checkout
         </Button>
         <Button className="review-card__save" onClick={onSave} variant="ghost">

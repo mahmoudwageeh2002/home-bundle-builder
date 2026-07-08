@@ -70,6 +70,36 @@
   font: var(--font-small);
 }
 
+.modal--success {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.modal__success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--color-white);
+  background: var(--color-accent);
+  box-shadow: 0 12px 24px rgba(10, 162, 136, 0.24);
+}
+
+.modal__success-icon svg {
+  width: 38px;
+  height: 38px;
+  stroke-width: 3px;
+}
+
+.modal__done-button {
+  min-width: 140px;
+  margin-top: 4px;
+}
+
 @media (max-width: 620px) {
   .modal {
     padding: var(--space-7) var(--space-5) var(--space-5);

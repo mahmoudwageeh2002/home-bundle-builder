@@ -9,13 +9,14 @@ type BuilderApi = ReturnType<typeof useBundleBuilder>
 
 type StepAccordionProps = {
   api: BuilderApi
+  onReview: () => void
   onStepChange: (stepId: StepId) => void
   openStep: StepId
   products: BundleProduct[]
   steps: BundleStep[]
 }
 
-export function StepAccordion({ api, onStepChange, openStep, products, steps }: StepAccordionProps) {
+export function StepAccordion({ api, onReview, onStepChange, openStep, products, steps }: StepAccordionProps) {
   return (
     <div className="steps" aria-label="Bundle builder steps">
       {steps.map((step, index) => {
@@ -71,7 +72,7 @@ export function StepAccordion({ api, onStepChange, openStep, products, steps }: 
                   </div>
 
                   <div className="step__next">
-                    <Button onClick={() => onStepChange(nextStep?.id ?? step.id)} variant="outline">
+                    <Button onClick={() => (nextStep ? onStepChange(nextStep.id) : onReview())} variant="outline">
                       {step.nextLabel}
                     </Button>
                   </div>
